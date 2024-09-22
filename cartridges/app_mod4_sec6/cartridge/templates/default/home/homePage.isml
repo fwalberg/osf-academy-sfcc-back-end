@@ -1,0 +1,12 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('/js/productTile.js');
+        assets.addCss('/css/homePage.css');
+    </isscript>
+
+    <div class="home-main homepage">
+        <h1> Custom basic template | Francisco Santos</h1>
+        <isslot id="home-main-m" description="Main home page slot." context="global" />
+    </div>
+</isdecorate>
