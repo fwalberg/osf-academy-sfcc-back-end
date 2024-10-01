@@ -1,4 +1,0 @@
-
-<isdecorate template="product/productTile">
-    <isinsert template="discountSection" position="after" element="</iscontent>" />
-</isdecorate>

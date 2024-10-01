@@ -1,0 +1,3 @@
+<div class="discount-percentage">
+    ${Resource.msgf('best.deal.label', 'productTile', null, pdict.discountPercentage)}
+</div>
