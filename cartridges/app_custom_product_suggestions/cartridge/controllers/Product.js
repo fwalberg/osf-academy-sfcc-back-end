@@ -3,47 +3,26 @@
 const server = require('server');
 server.extend(module.superModule);
 
-const productMgr = require('dw/catalog/ProductMgr');
-const productCategory = require('dw/catalog/Category');
-const productSearchModel = require('dw/catalog/ProductSearchModel');
+server.append('Show', (req, res, next) => {
+    const ProductSearchModel = require('dw/catalog/ProductSearchModel');
+    const ProductMgr = require('dw/catalog/ProductMgr')
+    const CatalogMrg = require('dw/catalog/CatalogMgr')
 
+    const product = ProductMgr.getProduct(res.viewData.product.id);
+    const productCategory = product.primaryCategory.ID;
 
-
-server.append('Show', function (req, res, next) {
-    const productId = req.querystring.pid;
-    const myProduct = productMgr.getProduct(productId);
-
-    let viewData = res.getViewData();
-
-    viewData.productId = productId;
-
-    res.setViewData(viewData);
+    const productSearchModel = new ProductSearchModel();
+    productSearchModel.setCategoryID(productCategory);
+    productSearchModel.search();
+    
+    const maxProductIDs = 4;
+    const suggestedProducts = productSearchModel.getProductSearchHits().asList().toArray().slice(0, maxProductIDs);
 
     res.json({
-        productId: productId,
+        productTarget: product.name,
+        category: productCategory,
+        suggestedProductsIDs: suggestedProducts.toString()
     });
-
-    
-
-
-   
-    // const productSuggestions = productSearchModel.search('customSuggestions', {
-    //     categoryID: targetProduct.primaryCategory.ID,
-    //     searchPhrase: targetProduct.name,
-    //     max: 4
-    // });
-    
-    // const productSuggestionsList = [];
-    // let productSuggestionsIterator = productSuggestions.productSearchHits.iterator();
-    // while (productSuggestionsIterator.hasNext()) {
-    //     let productSuggestionsHit = productSuggestionsIterator.next();
-    //     let productSuggestionsProduct = productSuggestionsHit.product;
-    //     productSuggestionsList.push(productSuggestionsProduct);
-    // }
-
-    // res.json({
-    //     productId: productId,
-    // });
 
     next();
 });
