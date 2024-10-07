@@ -1,0 +1,6 @@
+<isloop items="${pdict.suggestedProducts}" var="suggestedProduct">
+    <isset name="product" value="${suggestedProduct}" scope="page" />
+    <div class="suggested-product-tile">
+        <isinclude url="${URLUtils.url('Tile-Show', 'pid', product.ID, 'pview', 'tile', 'ratings', true, 'swatches', true)}" />
+    </div>
+</isloop>
