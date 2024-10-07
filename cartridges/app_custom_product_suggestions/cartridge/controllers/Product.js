@@ -8,20 +8,24 @@ server.append('Show', (req, res, next) => {
     const ProductMgr = require('dw/catalog/ProductMgr')
     const CatalogMrg = require('dw/catalog/CatalogMgr')
 
-    const product = ProductMgr.getProduct(res.viewData.product.id);
-    const productCategory = product.primaryCategory.ID;
+    const product = ProductMgr.getProduct(req.querystring.pid);
+    const productCategory = product.variant ? product.variationModel.defaultVariant
+        .masterProduct.primaryCategory.ID : product.primaryCategory.ID;
 
     const productSearchModel = new ProductSearchModel();
     productSearchModel.setCategoryID(productCategory);
     productSearchModel.search();
     
-    const maxProductIDs = 4;
-    const suggestedProducts = productSearchModel.getProductSearchHits().asList().toArray().slice(0, maxProductIDs);
-
-    res.json({
-        productTarget: product.name,
-        category: productCategory,
-        suggestedProductsIDs: suggestedProducts.toString()
+    const maxProductHits = 4;
+    const suggestedProducts = productSearchModel
+        .getProductSearchHits()
+        .asList().toArray()
+        .filter(hit => hit.getProduct().ID != product.ID)
+        .slice(0, maxProductHits)
+        .map(hit => hit.getProduct());
+    
+    res.setViewData({
+        suggestedProducts: suggestedProducts.toString(),
     });
 
     next();
