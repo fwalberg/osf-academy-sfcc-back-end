@@ -1,3 +1,7 @@
+<isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addCss('/css/suggestedProducts.css');
+</isscript>
 <isloop items="${pdict.suggestedProducts}" var="suggestedProduct">
     <isset name="product" value="${suggestedProduct}" scope="page" />
     <div class="suggested-product-tile">

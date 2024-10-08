@@ -25,7 +25,7 @@ server.append('Show', (req, res, next) => {
         .map(hit => hit.getProduct());
     
     res.setViewData({
-        suggestedProducts: suggestedProducts.toString(),
+        suggestedProducts: suggestedProducts,
     });
 
     next();
