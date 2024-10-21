@@ -19,12 +19,14 @@ server.append('Show', (req, res, next) => {
     const carTotal = currentBasket.totalGrossPrice.value;
     const cartThreshold = Site.getCurrent().getCustomPreferenceValue('cartTotalThreshold');
     const isThresholdExceeded = carTotal >= cartThreshold;
+    let cartMessage = '';
 
     let viewData = res.getViewData();
     if (isThresholdExceeded) {
-        const cartMessage = Site.getCurrent()
+        cartMessage = Site.getCurrent()
             .getCustomPreferenceValue('cartTotalThresholdMessage')
-            .concat(cartThreshold);
+            .concat(cartThreshold)
+            .concat("!");
 
         viewData.cartMessage = cartMessage;
         viewData.isThresholdExceeded = isThresholdExceeded;
