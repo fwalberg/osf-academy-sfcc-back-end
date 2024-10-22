@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <div class="client-information">
+            <p>
+
+            </p>
+        </div>
+
+        <div class="product-information">
+            <p>
+
+            </p>
+        </div>
+
+        <div class="recomendations">
+
+        </div>
+    </body>
+</html>
