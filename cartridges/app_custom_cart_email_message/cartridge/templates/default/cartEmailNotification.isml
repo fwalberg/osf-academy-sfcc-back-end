@@ -1,19 +1,22 @@
 <html>
     <body>
-        <div class="client-information">
+        <div class="email email-header">
             <p>
-
+                The following product was added to your cart.
             </p>
         </div>
 
-        <div class="product-information">
-            <p>
+        <div class="email email-product">
+            <div class=product-image>
+                <img src="${pdict.Product.image}" alt="${pdict.Product.name}" />
+            </div>
 
-            </p>
-        </div>
-
-        <div class="recomendations">
-
+            <div class="product-details">
+                <p>Product Name: ${pdict.Product.name}</p>
+                <p>Product Description: ${pdict.Product.description}</p>
+                <p>Each - USD${pdict.Product.price}</p>
+                <p>Quantity - ${pdict.Product.quantity}</p>
+            </div>
         </div>
     </body>
 </html>
