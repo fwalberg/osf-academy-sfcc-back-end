@@ -1,21 +1,26 @@
+<iscontent type="text/html" charset="UTF-8" compact="true" />
 <html>
     <body>
-        <div class="email email-header">
-            <p>
-                The following product was added to your cart.
-            </p>
-        </div>
-
-        <div class="email email-product">
-            <div class=product-image>
-                <img src="${pdict.Product.image}" alt="${pdict.Product.name}" />
+        <div class=main-container>
+            <div class="email-header">
+                <p>
+                    The following product was added to your cart.
+                </p>
             </div>
 
-            <div class="product-details">
-                <p>Product Name: ${pdict.Product.name}</p>
-                <p>Product Description: ${pdict.Product.description}</p>
-                <p>Each - USD${pdict.Product.price}</p>
-                <p>Quantity - ${pdict.Product.quantity}</p>
+            <div class="email-product">
+                <div class=product-image>
+                    <img src="${pdict.Product.image}" alt="${pdict.Product.name}" />
+                </div>
+
+                <div class="product-details">
+                    <p>
+                        Product Name: <a href="${pdict.Product.productUrl}"><isprint value="${pdict.Product.name}" /></a>
+                    </p>
+                    <p>Product Description: <isprint value="${pdict.Product.description}" /></p>
+                    <p>Each - USD <isprint value="${pdict.Product.price}" /></p>
+                    <p>Quantity - <isprint value="${pdict.Product.quantity}" style="INTEGER" /></p>
+                </div>
             </div>
         </div>
     </body>

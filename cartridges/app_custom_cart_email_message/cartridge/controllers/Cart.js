@@ -6,44 +6,32 @@ server.extend(module.superModule);
 server.append('AddProduct', (req, res, next) => {
 
     const BasketMgr = require('dw/order/BasketMgr');
+    const URLUtils = require('dw/web/URLUtils');
     const currentBasket = BasketMgr.getCurrentBasket();
     const customer = req.currentCustomer.raw;
 
-    const customerEmail = customer.getProfile().getEmail();
+    let customerEmail = customer.getProfile().getEmail();
 
     const productLineItems = currentBasket.getProductLineItems();
     const lastAddedProduct = productLineItems[productLineItems.length - 1];
 
     if (lastAddedProduct) {
-        const productId = lastAddedProduct.getProductID();
         const productName = lastAddedProduct.getProductName();
-        const productImage = lastAddedProduct.getProduct().getImage('large').getURL();
+        const productImage = lastAddedProduct.getProduct().getImage('medium').getAbsURL().toString();
+        const productUrl = URLUtils.https('Product-Show', 'pid', lastAddedProduct.getProductID()).toString();
         const productDescription = lastAddedProduct.getProduct().getShortDescription();
         const productPrice = lastAddedProduct.getPrice().getValue();
         const productQuantity = lastAddedProduct.getQuantityValue();
 
-        // Enviar e-mail com as informações do produto
         sendProductAddedEmail(customerEmail, {
             image: productImage,
+            productUrl: productUrl,
             name: productName,
             description: productDescription,
             price: productPrice,
             quantity: productQuantity
         });
-
-        res.setViewData({
-            customerEmail: customerEmail,
-            lastAddedProductId: productId,
-            lastAddedProductName: productName
-        });
-
-    } else {
-        res.setViewData({
-            customerEmail: customerEmail,
-            message: 'Nenhum produto foi adicionado recentemente.'
-        });
     }
-
 
     next();
 });
@@ -56,23 +44,20 @@ function sendProductAddedEmail(toEmail, productData) {
 
     const mail = new Mail();
     mail.addTo(toEmail);
-    mail.setFrom(Site.current.getCustomPreferenceValue('customerServiceEmail') || 'no-reply@example.com');
-    mail.setSubject('Produto Adicionado ao Carrinho');
+    mail.setFrom(Site.current.getCustomPreferenceValue('customerServiceEmail') || 'noreply@salesforce.com');
+    mail.setSubject('Confirmation for Your Order');
 
-    // Renderizar o template ISML
     const context = new HashMap();
     context.put('Product', productData);
 
-    const template = new Template('cartridges/app_custom_cart_email_message/cartridge/templates/default/cartEmailNotification.isml');
-    const emailContent = template.render(context).text;
+    const template = new Template('cartEmailNotification.isml');
+    const emailContent = template.render(context);
 
-    mail.setContent(emailContent, 'text/html', 'UTF-8');
+    mail.setContent(emailContent);
 
     try {
         mail.send();
-        // Log ou outra ação em caso de sucesso
     } catch (e) {
-        // Log ou outra ação em caso de erro
         require('dw/system/Logger').error('Erro ao enviar e-mail: ' + e.message);
     }
 }
