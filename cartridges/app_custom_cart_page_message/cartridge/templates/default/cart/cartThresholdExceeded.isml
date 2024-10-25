@@ -1,0 +1,3 @@
+<div class="cart-threshold-exceeded-container">
+    <p class="cart-threshold-exceeded-message"> ${pdict.cartMessage} </p>
+</div>
